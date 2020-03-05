@@ -10,109 +10,167 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const eng = new Engineer()
-
+const employeeArray = []
 // function whoIsYou() {
-inquirer
+// inquirer
+//     .prompt([
+//         {
+//             type: "input",
+//             message: "how many employees would you like to add.",
+//             name: "employeeNum"
+//         }
+//     ])
+//     .then(function (res) {
+//         for (i = 0; i <= parseInt(res.employeeNum); i++) {
+function addEmployee() {
+    inquirer
 
-    .prompt([
-        {
-            type: "input",
-            message: "what is your name.",
-            name: "name",
-        }, {
+        .prompt([
+            {
+                type: "input",
+                message: "what is your name.",
+                name: "name",
+            }, {
 
-            type: "list",
-            message: "what is your role",
-            choices: ["Manager", "Engineer", "Intern"],
-            name: "role",
-        }, {
+                type: "list",
+                message: "what is your role",
+                choices: ["Manager", "Engineer", "Intern"],
+                name: "role",
+            }, {
 
-            type: "input",
-            message: "what is your email",
-            name: "email",
-        }, {
+                type: "input",
+                message: "what is your email",
+                name: "email",
+            }, {
 
-            type: "input",
-            message: "what is your ID",
-            name: "id",
-        }
-    ])
-    .then(function (res) {
+                type: "input",
+                message: "what is your ID",
+                name: "id",
+            }
+        ])
+        .then(function (res) {
 
-        if (res.role == "Engineer") {
+            if (res.role === "Engineer") {
 
-            inquirer
-                .prompt([
-                    {
-                        type: "input",
-                        message: "what is your github",
-                        name: "github",
-                    }
-                ])
-                .then(function(addRes) {
-                    let name = res.name
-                    let email = res.email
-                    let id = res.id 
-                    let github = res.addRes
-                    const engineer = new Engineer(name, id, email, github)
-                })
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            message: "what is your github",
+                            name: "github",
+                        }
+                    ])
+                    .then(function (addRes) {
+                        let name = res.name
+                        let email = res.email
+                        let id = res.id
+                        let github = addRes.github
+                        const engineer = new Engineer(name, id, email, github)
+                        employeeArray.push(engineer)
+                        addAnother()
+                        
+                    })
 
-        }
-        else if (res.role === "Manager") {
+            }
+            else if (res.role === "Manager") {
 
-            inquirer
-                .prompt([
-                    {
-                        type: "input",
-                        message: "what is your office number",
-                        name: "officeNumber",
-                    }
-                ])
-                .then(function(addRes) {
-                    let name = res.name
-                    let email = res.email
-                    let id = res.id 
-                    let officeNumber = res.addRes
-                    const engineer = new Engineer(name, id, email, officeNumber)
-                })
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            message: "what is your office number",
+                            name: "officeNumber",
+                        }
+                    ])
+                    .then(function (addRes) {
+                        let name = res.name
+                        console.log(res.name)
+                        let email = res.email
+                        let id = res.id
+                        let officeNumber = addRes.officeNumber
+                        const manager = new Manager(name, id, email, officeNumber)
+                        console.log(manager)
+                        employeeArray.push(manager)
+                        addAnother()
+                        
 
-        }
-        else if (res.role === "Intern") {
+                    })
 
-            inquirer
-                .prompt([
-                    {
-                        type: "input",
-                        message: "what is the school that you are going to",
-                        name: "school",
-                    }
-                ])
-                .then(function(addRes) {
-                    let name = res.name
-                    let email = res.email
-                    let id = res.id 
-                    let school = res.addRes
-                    const intern = new Intern(name, id, email, school)
-                })
+            }
+            else if (res.role === "Intern") {
 
-        }
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            message: "what is the school that you are going to",
+                            name: "school",
+                        }
+                    ])
+                    .then(function (addRes) {
+                        let name = res.name
+                        let email = res.email
+                        let id = res.id
+                        let school = addRes.school
+                        const intern = new Intern(name, id, email, school)
+                        employeeArray.push(intern)
+                        addAnother()
+                        
+                    })
 
+            }
+
+        })
+}
+
+addEmployee()
+
+
+function writeFile() {
+    fs.writeFile("team.html", render(employeeArray), function (err) {
+        if (err) throw err;
     })
-// }
-// whoIsYou()
+}
 
-    // Write code to use inquirer to gather information about the development team members,
-    // and to create objects for each team member (using the correct classes as blueprints!)
+function addAnother(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                message: "would you like to add someone else",
+                choices: ["Yes", "No"],
+                name: "add",
+            }
+        ])
+        .then(function(res){
+            if (res.add === "Yes") {
+                addEmployee()
+            }
+            else{
+                writeFile()
+            }
+            
+        })
+}
 
-    // After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
 
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
+//     }
+
+// })
+        // }
+        // whoIsYou()
+
+        // Write code to use inquirer to gather information about the development team members,
+        // and to create objects for each team member (using the correct classes as blueprints!)
+
+        // After the user has input all employees desired, call the `render` function (required
+        // above) and pass in an array containing all employee objects; the `render` function will
+        // generate and return a block of HTML including templated divs for each employee!
+
+        // After you have your html, you're now ready to create an HTML file using the HTML
+        // returned from the `render` function. Now write it to a file named `team.html` in the
+        // `output` folder. You can use the variable `outputPath` above target this location.
+        // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
 
 // HINT: each employee type (manager, engineer, or intern) has slightly different
