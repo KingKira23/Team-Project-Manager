@@ -39,7 +39,6 @@ inquirer
         }
     ])
     .then(function (res) {
-        console.log(res)
 
         if (res.role == "Engineer") {
 
@@ -52,8 +51,11 @@ inquirer
                     }
                 ])
                 .then(function(addRes) {
-                    console.log(res)
-                    console.log(addRes)
+                    let name = res.name
+                    let email = res.email
+                    let id = res.id 
+                    let github = res.addRes
+                    const engineer = new Engineer(name, id, email, github)
                 })
 
         }
@@ -64,12 +66,15 @@ inquirer
                     {
                         type: "input",
                         message: "what is your office number",
-                        name: "officeNum",
+                        name: "officeNumber",
                     }
                 ])
                 .then(function(addRes) {
-                    console.log(res)
-                    console.log(addRes)
+                    let name = res.name
+                    let email = res.email
+                    let id = res.id 
+                    let officeNumber = res.addRes
+                    const engineer = new Engineer(name, id, email, officeNumber)
                 })
 
         }
@@ -84,8 +89,11 @@ inquirer
                     }
                 ])
                 .then(function(addRes) {
-                    console.log(res)
-                    console.log(addRes)
+                    let name = res.name
+                    let email = res.email
+                    let id = res.id 
+                    let school = res.addRes
+                    const intern = new Intern(name, id, email, school)
                 })
 
         }
